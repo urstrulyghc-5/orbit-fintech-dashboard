@@ -139,3 +139,8 @@ Note: No external proprietary code or datasets have been used. This project is i
 1. ORBIT FinTech Dashboard demonstrates the integration of financial analytics with modern frontend engineering.  
 2. It serves as a scalable foundation for advanced financial visualization systems.  
 3. It highlights UI design, data structuring, and system thinking in fintech applications.
+
+## 15. Author
+## G Hari Charan
+MBA in Finance and Business Analytics
+GitHub: https://github.com/urstrulyghc-5
