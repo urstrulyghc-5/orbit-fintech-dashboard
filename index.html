@@ -2304,78 +2304,51 @@ setInterval(tickKpis, 1500);
    Vanilla-JS equivalent of Framer Motion's "whileTap" ripple,
    applied globally via event delegation (no markup changes).
    ============================================================ */
-  <!-- SAFE SCRIPT WRAPPER -->
-  <script>
-    try {
+     ============================================================ */
+(function(){
+  const RIPPLE_SELECTOR = '.card, .pill-btn, .zbtn, .eco-tab, .btn, table.tx-table tr, .flow-node';
+  document.addEventListener('pointerdown', (e)=>{
+    const target = e.target.closest(RIPPLE_SELECTOR);
+    if(!target) return;
+    const rect = target.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height) * 0.9;
+    const ripple = document.createElement('span');
+    ripple.className = 'ripple';
+    ripple.style.width = ripple.style.height = size + 'px';
+    ripple.style.left = (e.clientX - rect.left - size/2) + 'px';
+    ripple.style.top = (e.clientY - rect.top - size/2) + 'px';
+    const prevPos = getComputedStyle(target).position;
+    if(prevPos === 'static') target.style.position = 'relative';
+    target.style.overflow = target.style.overflow || 'hidden';
+    target.appendChild(ripple);
+    ripple.addEventListener('animationend', ()=> ripple.remove());
+  }, {passive:true});
+})();
 
-      (function(){
-        const RIPPLE_SELECTOR = '.card, .pill-btn, .zbtn, .eco-tab, .btn, table.tx-table tr, .flow-node';
-
-        document.addEventListener('pointerdown', (e)=>{
-          const target = e.target.closest(RIPPLE_SELECTOR);
-          if(!target) return;
-
-          const rect = target.getBoundingClientRect();
-          const size = Math.max(rect.width, rect.height) * 0.9;
-
-          const ripple = document.createElement('span');
-          ripple.className = 'ripple';
-          ripple.style.width = ripple.style.height = size + 'px';
-          ripple.style.left = (e.clientX - rect.left - size/2) + 'px';
-          ripple.style.top = (e.clientY - rect.top - size/2) + 'px';
-
-          const prevPos = getComputedStyle(target).position;
-          if(prevPos === 'static') target.style.position = 'relative';
-
-          target.style.overflow = 'hidden';
-          target.appendChild(ripple);
-
-          ripple.addEventListener('animationend', ()=> ripple.remove());
-        }, {passive:true});
-      })();
-
-
-      (function(){
-        const fill = document.getElementById('bootFill');
-        const status = document.getElementById('bootStatus');
-        const boot = document.getElementById('bootscreen');
-
-        if(!fill || !status || !boot) return;
-
-        const steps = [
-          'Initializing intelligence core…',
-          'Connecting to payment rails…',
-          'Syncing transaction intelligence…',
-          'Calibrating risk radar…',
-          'Ready.'
-        ];
-
-        let pct = 0;
-        let step = 0;
-
-        const t = setInterval(()=>{
-          pct += Math.random()*15 + 5;
-
-          if(pct > (step+1)*20){
-            step = Math.min(step+1, steps.length-1);
-          }
-
-          status.textContent = steps[step];
-          fill.style.width = Math.min(pct,100) + '%';
-
-          if(pct >= 100){
-            clearInterval(t);
-            setTimeout(()=> boot.classList.add('hidden'), 300);
-          }
-        }, 200);
-      })();
-
-    } catch(err) {
-      console.log("Dashboard script error handled:", err);
+/* ============================================================
+   ORBIT BOOT SEQUENCE
+   ============================================================ */
+(function(){
+  const fill = document.getElementById('bootFill');
+  const status = document.getElementById('bootStatus');
+  const boot = document.getElementById('bootscreen');
+  const steps = ['Initializing intelligence core…','Connecting to payment rails…','Syncing transaction intelligence…','Calibrating 3D risk radar…','Ready.'];
+  let pct = 0, stepIdx = 0;
+  const t = setInterval(()=>{
+    pct += Math.random()*18 + 8;
+    if(pct > (stepIdx+1)*20) stepIdx = Math.min(stepIdx+1, steps.length-1);
+    status.textContent = steps[stepIdx];
+    fill.style.width = Math.min(pct,100)+'%';
+    if(pct >= 100){
+      clearInterval(t);
+      setTimeout(()=> boot.classList.add('hidden'), 350);
     }
-  </script>
+  }, 220);
+})();
+  <!-- All your dashboard content ends here -->
 
-  <!-- FOOTER -->
+  <script src="script.js"></script>
+
   <footer style="text-align: center; padding: 20px; font-size: 13px; color: #888; border-top: 1px solid #e5e5e5; margin-top: 40px;">
     <p>Concept and design direction by G Hari Charan | MBA Finance and Business Analytics | 2026</p>
   </footer>
